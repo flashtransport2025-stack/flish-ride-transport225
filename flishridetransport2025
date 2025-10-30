@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLASH RIDE - Passenger Transportation</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Arial', sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body { 
+            line-height: 1.6; 
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        /* Header Styles */
+        header { 
+            background: var(--primary); 
+            color: white; 
+            padding: 1rem; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo { 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links { 
+            display: flex; 
+            list-style: none; 
+        }
+        
+        .nav-links li { 
+            margin-left: 1.5rem; 
+        }
+        
+        .nav-links a { 
+            color: white; 
+            text-decoration: none; 
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: var(--secondary);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .page {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-content h1 { 
+            font-size: 3rem; 
+            margin-bottom: 1rem; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero-content p { 
+            font-size: 1.3rem; 
+            margin-bottom: 2rem; 
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            background: var(--secondary);
+            color: white;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Section Styles */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            font-size: 2.5rem;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .service-card {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Contact Cards */
+        .contact-card {
+            background: linear-gradient(135deg, var(--primary), #34495e);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .contact-card h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section a {
+            color: var(--light);
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--secondary);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mb-3 { margin-bottom: 3rem; }
+        .mt-1 { margin-top: 1rem; }
+        .mt-2 { margin-top: 2rem; }
+        .mt-3 { margin-top: 3rem; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">FLASH <span>RIDE</span></div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('about')">About</a></li>
+                <li><a href="#" onclick="showPage('services')">Services</a></li>
+                <li><a href="#" onclick="showPage('fleet')">Our Fleet</a></li>
+                <li><a href="#" onclick="showPage('rates')">Rates</a></li>
+                <li><a href="#" onclick="showPage('book')">Book Now</a></li>
+                <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>FLASH RIDE PASSENGERS TRANSPORTATION</h1>
+                    <p>L.L.C-S.P.C - Your Trusted Bus Rental Service in Al Ain</p>
+                    <button class="cta-button" onclick="showPage('book')">Book Your Ride Now</button>
+                </div>
+            </div>
+
+            <div class="services-section" style="padding: 2rem;">
+                <h2 class="section-title">Our Services</h2>
+                <p class="section-subtitle">Professional passenger transportation solutions</p>
+                
+                <div class="grid-3">
+                    <div class="service-card">
+                        <div class="service-icon">🚌</div>
+                        <h3>School Transportation</h3>
+                        <p>Safe and reliable school bus services for students</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">💼</div>
+                        <h3>Corporate Transport</h3>
+                        <p>Employee transportation solutions for companies</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">✈️</div>
+                        <h3>Airport Transfer</h3>
+                        <p>Comfortable airport transportation services</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🎉</div>
+                        <h3>Tour & Events</h3>
+                        <p>Special events, weddings and city tours</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🏢</div>
+                        <h3>Staff Transportation</h3>
+                        <p>Regular staff pickup and drop services</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🚐</div>
+                        <h3>Outstation Tours</h3>
+                        <p>Long distance tours across UAE</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <h1 class="section-title">About FLASH RIDE</h1>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <h2>Our Story</h2>
+                    <p>FLASH RIDE PASSENGERS TRANSPORTATION L.L.C-S.P.C is a premier transportation service provider based in Al Ain, UAE. We specialize in safe, reliable, and comfortable passenger transportation via rented buses.</p>
+                    <p>With years of experience in the transportation industry, we have built a reputation for excellence and reliability.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>Why Choose Us?</h2>
+                    <ul style="margin-left: 2rem;">
+                        <li>Modern and well-maintained fleet</li>
+                        <li>Professional and experienced drivers</li>
+                        <li>24/7 customer support</li>
+                        <li>Competitive pricing</li>
+                        <li>Safety-first approach</li>
+                        <li>Wide service area coverage</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card mt-2">
+                <h2>Our Mission</h2>
+                <p>To provide safe, reliable, and comfortable transportation services that exceed customer expectations while maintaining the highest standards of safety and professionalism.</p>
+            </div>
+        </div>
+
+        <!-- Services Page -->
+        <div id="services" class="page">
+            <h1 class="section-title">Our Services</h1>
+            <p class="section-subtitle">Comprehensive transportation solutions</p>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <h3>🚌 School Bus Services</h3>
+                    <p>Safe and punctual transportation for students with trained drivers and monitored routes.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>💼 Corporate Transportation</h3>
+                    <p>Employee pickup and drop services for companies and factories in Al Ain area.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>✈️ Airport Transfers</h3>
+                    <p>Comfortable rides to and from Dubai, Abu Dhabi, and other airports.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>🎉 Event Transportation</h3>
+                    <p>Weddings, conferences, and special events transportation with luxury buses.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>🏢 Staff Transportation</h3>
+                    <p>Regular staff transportation services for industries and businesses.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>🚐 Outstation Tours</h3>
+                    <p>Long distance tours across UAE with comfortable coaches.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fleet Page -->
+        <div id="fleet" class="page">
+            <h1 class="section-title">Our Fleet</h1>
+            <p class="section-subtitle">Modern and well-maintained buses</p>
+            
+            <div class="grid-3">
+                <div class="card">
+                    <h3>Standard Buses</h3>
+                    <p>Capacity: 25-35 passengers</p>
+                    <p>Features: AC, Comfortable seats, Storage</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Luxury Coaches</h3>
+                    <p>Capacity: 40-50 passengers</p>
+                    <p>Features: Premium seats, Entertainment, WiFi</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Mini Buses</h3>
+                    <p>Capacity: 15-20 passengers</p>
+                    <p>Features: AC, Compact size, Easy maneuverability</p>
+                </div>
+            </div>
+            
+            <div class="card mt-2">
+                <h3>Fleet Features</h3>
+                <div class="grid-4">
+                    <div class="text-center">
+                        <h4>✅ GPS Tracking</h4>
+                        <p>Real-time location</p>
+                    </div>
+                    <div class="text-center">
+                        <h4>✅ Air Conditioning</h4>
+                        <p>Climate control</p>
+                    </div>
+                    <div class="text-center">
+                        <h4>✅ Safety Features</h4>
+                        <p>First aid, fire extinguisher</p>
+                    </div>
+                    <div class="text-center">
+                        <h4>✅ Regular Maintenance</h4>
+                        <p>Well-maintained fleet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rates Page -->
+        <div id="rates" class="page">
+            <h1 class="section-title">Our Rates</h1>
+            <p class="section-subtitle">Competitive and transparent pricing</p>
+            
+            <div class="grid-3">
+                <div class="card">
+                    <h3>School Transportation</h3>
+                    <p>Monthly packages starting from</p>
+                    <h2>AED 300/student</h2>
+                </div>
+                
+                <div class="card">
+                    <h3>Corporate Transport</h3>
+                    <p>Monthly contract basis</p>
+                    <h2>AED 4,500/month</h2>
+                </div>
+                
+                <div class="card">
+                    <h3>Airport Transfer</h3>
+                    <p>Al Ain to Dubai Airport</p>
+                    <h2>AED 600/trip</h2>
+                </div>
+            </div>
+            
+            <div class="card mt-2">
+                <h3>Custom Quotes</h3>
+                <p>For special requirements and custom packages, please contact us for personalized quotes.</p>
+                <button class="cta-button" onclick="showPage('contact')">Get Custom Quote</button>
+            </div>
+        </div>
+
+        <!-- Book Now Page -->
+        <div id="book" class="page">
+            <h1 class="section-title">Book Your Ride</h1>
+            <p class="section-subtitle">Fill out the form below to book our services</p>
+            
+            <div class="card">
+                <form id="bookingForm">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="service">Service Type *</label>
+                            <select id="service" class="form-control" required>
+                                <option value="">Select Service</option>
+                                <option value="school">School Transportation</option>
+                                <option value="corporate">Corporate Transport</option>
+                                <option value="airport">Airport Transfer</option>
+                                <option value="events">Events & Tours</option>
+                                <option value="staff">Staff Transportation</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="date">Preferred Date</label>
+                            <input type="date" id="date" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="passengers">Number of Passengers</label>
+                            <input type="number" id="passengers" class="form-control" min="1">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Additional Requirements</label>
+                        <textarea id="message" class="form-control" rows="4" placeholder="Any special requirements..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="cta-button">Submit Booking Request</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <h1 class="section-title">Contact Us</h1>
+            <p class="section-subtitle">Get in touch with our team</p>
+            
+            <div class="grid-2">
+                <div class="contact-card">
+                    <h3>📍 Office Address</h3>
+                    <p><strong>FLASH RIDE PASSENGERS TRANSPORTATION</strong><br>
+                    L.L.C-S.P.C<br>
+                    Al Noud, Sharikat<br>
+                    Al Ain, UAE</p>
+                </div>
+                
+                <div class="contact-card">
+                    <h3>👑 Owner</h3>
+                    <p><strong>Nazir Ullah</strong><br>
+                    📞 <a href="tel:+971561547641" style="color: white;">056 154 7641</a></p>
+                </div>
+                
+                <div class="contact-card">
+                    <h3>💼 Manager</h3>
+                    <p><strong>Asif Ullah</strong><br>
+                    📞 <a href="tel:+971525264818" style="color: white;">052 526 4818</a></p>
+                </div>
+                
+                <div class="contact-card">
+                    <h3>🔧 Maintenance</h3>
+                    <p><strong>Zain Ullah</strong><br>
+                    📞 <a href="tel:+971589884480" style="color: white;">058 988 4480</a></p>
+                </div>
+                
+                <div class="contact-card">
+                    <h3>🚍 Drivers Incharge</h3>
+                    <p><strong>Muhammad Saleem</strong><br>
+                    📞 <a href="tel:+971589884481" style="color: white;">058 988 4481</a></p>
+                </div>
+                
+                <div class="contact-card">
+                    <h3>📧 Email</h3>
+                    <p><strong>flishtransport2025@gmail.com</strong></p>
+                    <p>For bookings and inquiries</p>
+                </div>
+            </div>
+            
+            <div class="card mt-2">
+                <h3>Service Areas</h3>
+                <p>We provide transportation services throughout UAE with focus on:</p>
+                <div class="grid-4 mt-1">
+                    <div>✅ Al Ain City</div>
+                    <div>✅ Al Noud Area</div>
+                    <div>✅ Sharikat District</div>
+                    <div>✅ Abu Dhabi</div>
+                    <div>✅ Dubai</div>
+                    <div>✅ Sharjah</div>
+                    <div>✅ All UAE</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>FLASH RIDE</h3>
+                <p>L.L.C-S.P.C</p>
+                <p>Al Noud, Sharikat, Al Ain, UAE</p>
+                <p>Your trusted transportation partner</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <p>Owner: Nazir Ullah - 0561547641</p>
+                <p>Manager: Asif Ullah - 0525264818</p>
+                <p>Email: flishtransport2025@gmail.com</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="#" onclick="showPage('book')">Book Now</a></p>
+                <p><a href="#" onclick="showPage('services')">Our Services</a></p>
+                <p><a href="#" onclick="showPage('contact')">Contact Us</a></p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Emergency</h3>
+                <p>Available 24/7</p>
+                <p>Urgent Bookings: 0561547641</p>
+                <p>Maintenance: 0589884480</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3" style="border-top: 1px solid #34495e; padding-top: 1rem;">
+            <p>&copy; 2024 FLASH RIDE PASSENGERS TRANSPORTATION L.L.C-S.P.C. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Booking Form Handling
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you! Your booking request has been submitted. We will contact you shortly.');
+            this.reset();
+            showPage('home');
+        });
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('FLASH RIDE Website Loaded Successfully!');
+        });
+    </script>
+</body>
+</html>
